@@ -12,7 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const ProgramCreatePage = () => {
   const [name, setName] = useState("");
-  const [editorContent, setEditorContent] = useState("");
+  // const [editorContent, setEditorContent] = useState("");
   const [registrationLink, setRegistrationLink] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -23,9 +23,9 @@ const ProgramCreatePage = () => {
     setName(event.target.value);
   };
 
-  const handleEditorChange = (content: string) => {
-    setEditorContent(content);
-  };
+  // const handleEditorChange = (content: string) => {
+  //   setEditorContent(content);
+  // };
 
   const handleImageChange = (file: File | null) => {
     setImage(file);
@@ -49,7 +49,7 @@ const ProgramCreatePage = () => {
 
     const formData = new FormData();
     formData.append("name", name);
-    formData.append("description", editorContent);
+    // formData.append("description", editorContent);
     formData.append("registration_link", registrationLink);
     formData.append("short_description", shortDescription);
     if (image) {
@@ -102,7 +102,7 @@ const ProgramCreatePage = () => {
               value={shortDescription}
               onChange={handleShortDescriptionChange}
             />
-            <Editor onChange={handleEditorChange} />
+            {/* <Editor onChange={handleEditorChange} /> */}
             <ImageUploader
               label="Image"
               name="image"
