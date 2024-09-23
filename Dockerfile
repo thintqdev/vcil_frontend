@@ -1,29 +1,23 @@
-FROM node:20.12.2-alpine3.18 as base
+# Use the official Node.js 18 image as the base image
+FROM node:18-alpine
 
-# All deps stage
-FROM base as deps
-WORKDIR /app
-ADD package.json package-lock.json ./
-RUN npm ci
+# Set the working directory in the container
+WORKDIR /usr/src/app
 
-# Production only deps stage
-FROM base as production-deps
-WORKDIR /app
-ADD package.json package-lock.json ./
-RUN npm ci --omit=dev
+# Copy package.json and package-lock.json (or yarn.lock) to the working directory
+COPY package*.json ./
 
-# Build stage
-FROM base as build
-WORKDIR /app
-COPY --from=deps /app/node_modules /app/node_modules
-ADD . .
-RUN node ace build
+# Install the dependencies
+RUN npm install
 
-# Production stage
-FROM base
-ENV NODE_ENV=production
-WORKDIR /app
-COPY --from=production-deps /app/node_modules /app/node_modules
-COPY --from=build /app/build /app
-EXPOSE 8080
-CMD ["node", "./bin/server.js"]
+# Copy the rest of the application code
+COPY . .
+
+# Build the Next.js application
+RUN npm run build
+
+# Expose the port on which Next.js will run
+EXPOSE 3000
+
+# Start the Next.js application
+CMD ["npm", "run", "start"]
